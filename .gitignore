@@ -1,0 +1,9 @@
+$ cat .gitignore
+# exclude anything the isnt necessary
+/debug/*
+/release/*
+Makefile
+Makefile.*
+*.Debug
+*.Release
+*.user
