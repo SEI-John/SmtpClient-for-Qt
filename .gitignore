@@ -4,3 +4,4 @@ release
 debug/*
 debug
 *.user
+*.qmake*
