@@ -6,7 +6,14 @@
 
 QT       += core network
 
-TARGET = SMTPEmail
+CONFIG(release, debug|release) {
+    warning("SMTP Email using release")
+    TARGET = SMTPEmail
+}
+else {
+    warning("SMTP Email using debug")
+    TARGET = SMTPEmaild
+}
 
 # Build as an application
 #TEMPLATE = app
