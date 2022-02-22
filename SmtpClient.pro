@@ -55,4 +55,16 @@ OTHER_FILES += \
     LICENSE \
     README.md
 
+CONFIG(debug, debug|release) {
+    DESTDIR = $$PWD/build/debug
+}
+CONFIG(release, debug|release) {
+    DESTDIR = $$PWD/build/release
+}
+
+OBJECTS_DIR = $$DESTDIR/.obj
+MOC_DIR = $$DESTDIR/.moc
+RCC_DIR = $$DESTDIR/.qrc
+UI_DIR = $$DESTDIR/.u
+
 FORMS +=
