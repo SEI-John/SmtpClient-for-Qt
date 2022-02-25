@@ -1,20 +1,20 @@
 /*
-  Copyright (c) 2011-2012 - Tőkés Attila
-
-  This file is part of SmtpClient for Qt.
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  See the LICENSE file for more details.
-*/
+ * Copyright (c) 2011-2012 - Tőkés Attila
+ *
+ * This file is part of SmtpClient for Qt.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * See the LICENSE file for more details.
+ */
 
 #ifndef SMTPCLIENT_H
 #define SMTPCLIENT_H
@@ -45,7 +45,9 @@ public:
         SendDataTimeoutError,
         AuthenticationFailedError,
         ServerError,    // 4xx smtp error
-        ClientError     // 5xx smtp error
+        ClientError,    // 5xx smtp error
+        NoClients,
+        NoError
     };
 
     enum ConnectionType
@@ -60,7 +62,7 @@ public:
 
     /* [1] Constructors and Destructors */
 
-    SmtpClient(const QString & host = "localhost", int port = 25, ConnectionType ct = TcpConnection);
+    SmtpClient(const QString& host = "localhost", int port = 25, ConnectionType ct = TcpConnection);
 
     ~SmtpClient();
 
@@ -70,27 +72,27 @@ public:
     /* [2] Getters and Setters */
 
     const QString& getHost() const;
-    void setHost(const QString &host);
+    void setHost(const QString& host);
 
     int getPort() const;
     void setPort(int port);
 
     const QString& getName() const;
-    void setName(const QString &name);
+    void setName(const QString& name);
 
     ConnectionType getConnectionType() const;
     void setConnectionType(ConnectionType ct);
 
-    const QString & getUser() const;
-    void setUser(const QString &user);
+    const QString& getUser() const;
+    void setUser(const QString& user);
 
-    const QString & getPassword() const;
-    void setPassword(const QString &password);
+    const QString& getPassword() const;
+    void setPassword(const QString& password);
 
     SmtpClient::AuthMethod getAuthMethod() const;
     void setAuthMethod(AuthMethod method);
 
-    const QString & getResponseText() const;
+    const QString& getResponseText() const;
     int getResponseCode() const;
 
     int getConnectionTimeout() const;
@@ -98,11 +100,11 @@ public:
 
     int getResponseTimeout() const;
     void setResponseTimeout(int msec);
-    
+
     int getSendMessageTimeout() const;
     void setSendMessageTimeout(int msec);
 
-    QTcpSocket* getSocket();
+    QTcpSocket *getSocket();
 
 
     /* [2] --- */
@@ -113,7 +115,7 @@ public:
     bool connectToHost();
 
     bool login();
-    bool login(const QString &user, const QString &password, AuthMethod method = AuthLogin);
+    bool login(const QString& user, const QString& password, AuthMethod method = AuthLogin);
 
     bool sendMail(MimeMessage& email);
 
@@ -140,8 +142,8 @@ protected:
     int connectionTimeout;
     int responseTimeout;
     int sendMessageTimeout;
-    
-    
+
+
     QString responseText;
     int responseCode;
 
@@ -156,7 +158,7 @@ protected:
 
     void waitForResponse();
 
-    void sendMessage(const QString &text);
+    void sendMessage(const QString& text);
 
     /* [5] --- */
 
@@ -175,10 +177,11 @@ signals:
 
     /* [7] Signals */
 
-    void smtpError(SmtpClient::SmtpError e);
+    void smtpError(SmtpClient::SmtpError e, QString details = "");
 
     /* [7] --- */
-
 };
+
+Q_DECLARE_METATYPE(SmtpClient::SmtpError)
 
 #endif // SMTPCLIENT_H
