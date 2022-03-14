@@ -403,6 +403,7 @@ bool SmtpClient::sendMail(MimeMessage& email)
 {
     try
     {
+        emit smtpDebug(QString("Attempting to send email from %1").arg(email.getSender().getAddress()));
         // Send the MAIL command with the sender
         sendMessage("MAIL FROM: <" + email.getSender().getAddress() + ">");
 
@@ -477,10 +478,17 @@ bool SmtpClient::sendMail(MimeMessage& email)
     }
     catch (ResponseTimeoutException)
     {
+        emit smtpDebug(QString("ResponseTimeoutException occurred"));
         return false;
     }
     catch (SendMessageTimeoutException)
     {
+        emit smtpDebug(QString("SendMessageTimeoutException occurred"));
+        return false;
+    }
+    catch (...)
+    {
+        emit smtpDebug(QString("A general exception occurred"));
         return false;
     }
 
@@ -517,6 +525,7 @@ void SmtpClient::waitForResponse()
             // Extract the respose code from the server's responce (first 3 digits)
             responseCode = responseText.left(3).toInt();
 
+            emit smtpDebug(QString("Received '%1'").arg(QString(responseText)));
             if (responseCode / 100 == 4)
             {
                 emit smtpError(ServerError, responseText);
@@ -538,6 +547,8 @@ void SmtpClient::waitForResponse()
 
 void SmtpClient::sendMessage(const QString& text)
 {
+    emit smtpDebug(QString("Sending '%1'").arg(QString(text.toUtf8() + "\r\n")));
+
     socket->write(text.toUtf8() + "\r\n");
     if (!socket->waitForBytesWritten(sendMessageTimeout))
     {

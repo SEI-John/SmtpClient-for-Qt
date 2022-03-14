@@ -177,6 +177,7 @@ signals:
 
     /* [7] Signals */
 
+    void smtpDebug(QString message);
     void smtpError(SmtpClient::SmtpError e, QString details = "");
 
     /* [7] --- */
