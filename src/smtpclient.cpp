@@ -49,6 +49,8 @@ SmtpClient::SmtpClient(const QString& host, int port, ConnectionType connectionT
 
 SmtpClient::~SmtpClient()
 {
+    emit smtpDebug("Deleting smtp server");
+
     if (socket)
     {
         delete socket;
