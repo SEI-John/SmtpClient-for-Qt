@@ -57,7 +57,7 @@ install(TARGETS demo2
 
 qt_generate_deploy_app_script(
     TARGET demo2
-    FILENAME_VARIABLE deploy_script
+    OUTPUT_SCRIPT deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )
 install(SCRIPT ${deploy_script})
