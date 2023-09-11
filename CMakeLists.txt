@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.16)
 project(SmtpClient VERSION 1.0 LANGUAGES C CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(target SmtpClient)
 
 find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Network)
 
 qt_standard_project_setup()
 
-qt_add_library(SmtpClient
+qt_add_library(${target}
     src/SmtpMime
     src/emailaddress.cpp src/emailaddress.h
     src/mimeattachment.cpp src/mimeattachment.h
@@ -24,17 +25,20 @@ qt_add_library(SmtpClient
     src/smtpclient.cpp src/smtpclient.h
     src/smtpexports.h
 )
-target_compile_definitions(SmtpClient PUBLIC
+target_compile_definitions(${target} PUBLIC
     SMTP_BUILD
 )
 
-target_link_libraries(SmtpClient PUBLIC
+target_include_directories(${target} INTERFACE 
+    ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(${target} PUBLIC
     Qt::Core
     Qt::Gui
     Qt::Network
 )
 
-install(TARGETS SmtpClient
+install(TARGETS ${target}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
