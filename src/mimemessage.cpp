@@ -24,7 +24,7 @@
 
 /* [1] Constructors and Destructors */
 MimeMessage::MimeMessage(bool createAutoMimeContent) :
-    replyTo(Q_NULLPTR),
+    replyTo(nullptr),
     hEncoding(MimePart::_8Bit)
 {
     if (createAutoMimeContent)
@@ -76,6 +76,7 @@ void MimeMessage::setReplyTo(EmailAddress *rto)
 void MimeMessage::setSender(EmailAddress *e)
 {
     this->sender = e;
+    e->setParent(this);
 }
 
 
@@ -95,6 +96,8 @@ void MimeMessage::addRecipient(EmailAddress *rcpt, RecipientType type)
         recipientsBcc << rcpt;
         break;
     }
+
+    rcpt->setParent(this);
 }
 
 
@@ -130,6 +133,13 @@ void MimeMessage::addPart(MimePart *part)
     }
 }
 
+<<<<<<< HEAD
+=======
+void MimeMessage::setInReplyTo(const QString& inReplyTo)
+{
+    mInReplyTo = inReplyTo;
+}
+>>>>>>> 6c668fc02aa975b7426e35345cc6a3bceed780ea
 
 void MimeMessage::setHeaderEncoding(MimePart::Encoding hEnc)
 {
@@ -335,6 +345,17 @@ QString MimeMessage::toString()
     /* ---------------------------------- */
 
     mime += "MIME-Version: 1.0\r\n";
+    if (!mInReplyTo.isEmpty())
+    {
+        mime += "In-Reply-To: <" + mInReplyTo + ">\r\n";
+        mime += "References: <" + mInReplyTo + ">\r\n";
+    }
+
+#if QT_VERSION_MAJOR < 5 //Qt4 workaround since RFC2822Date isn't defined
+    mime += QString("Date: %1\r\n").arg(QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss +/-TZ"));
+#else //Qt5 supported
+    mime += QString("Date: %1\r\n").arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date));
+#endif //support RFC2822Date
 
     mime += content->toString();
     return mime;
