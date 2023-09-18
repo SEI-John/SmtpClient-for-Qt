@@ -9,7 +9,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Network)
 
 qt_standard_project_setup()
 
-qt_add_library(${target}
+qt_add_library(${target} STATIC
     src/SmtpMime
     src/emailaddress.cpp src/emailaddress.h
     src/mimeattachment.cpp src/mimeattachment.h

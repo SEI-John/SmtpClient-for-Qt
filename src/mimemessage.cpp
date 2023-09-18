@@ -133,13 +133,12 @@ void MimeMessage::addPart(MimePart *part)
     }
 }
 
-<<<<<<< HEAD
-=======
+
 void MimeMessage::setInReplyTo(const QString& inReplyTo)
 {
     mInReplyTo = inReplyTo;
 }
->>>>>>> 6c668fc02aa975b7426e35345cc6a3bceed780ea
+
 
 void MimeMessage::setHeaderEncoding(MimePart::Encoding hEnc)
 {
@@ -351,11 +350,11 @@ QString MimeMessage::toString()
         mime += "References: <" + mInReplyTo + ">\r\n";
     }
 
-#if QT_VERSION_MAJOR < 5 //Qt4 workaround since RFC2822Date isn't defined
+#if QT_VERSION_MAJOR < 5 // Qt4 workaround since RFC2822Date isn't defined
     mime += QString("Date: %1\r\n").arg(QDateTime::currentDateTime().toString("dd MMM yyyy hh:mm:ss +/-TZ"));
-#else //Qt5 supported
+#else // Qt5 supported
     mime += QString("Date: %1\r\n").arg(QDateTime::currentDateTime().toString(Qt::RFC2822Date));
-#endif //support RFC2822Date
+#endif // support RFC2822Date
 
     mime += content->toString();
     return mime;
