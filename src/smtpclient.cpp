@@ -40,7 +40,7 @@ SmtpClient::SmtpClient(const QString& host, int port, ConnectionType connectionT
 
     connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
             this, SLOT(socketStateChanged(QAbstractSocket::SocketState)));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
+    connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
             this, SLOT(socketError(QAbstractSocket::SocketError)));
     connect(socket, SIGNAL(readyRead()),
             this, SLOT(socketReadyRead()));
@@ -422,7 +422,6 @@ bool SmtpClient::sendMail(MimeMessage& email)
         for (it = email.getRecipients().begin(), itEnd = email.getRecipients().end();
              it != itEnd; ++it)
         {
-
             sendMessage("RCPT TO:<" + (*it)->getAddress() + ">");
             waitForResponse();
 
@@ -501,15 +500,17 @@ bool SmtpClient::sendMail(MimeMessage& email)
 
 void SmtpClient::quit()
 {
-    try 
+    try
     {
         sendMessage("QUIT");
     }
-    catch(SmtpClient::SendMessageTimeoutException) 
+    catch (SmtpClient::SendMessageTimeoutException)
     {
-	//Manually close the connection to the smtp server if message "QUIT" wasn't received by the smtp server
-        if(socket->state() == QAbstractSocket::ConnectedState || socket->state() == QAbstractSocket::ConnectingState || socket->state() == QAbstractSocket::HostLookupState)
+        // Manually close the connection to the smtp server if message "QUIT" wasn't received by the smtp server
+        if ((socket->state() == QAbstractSocket::ConnectedState) || (socket->state() == QAbstractSocket::ConnectingState) || (socket->state() == QAbstractSocket::HostLookupState))
+        {
             socket->disconnectFromHost();
+        }
     }
 }
 
