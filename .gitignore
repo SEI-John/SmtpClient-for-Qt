@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # My custom ignores
 Makefile*
 release/*
@@ -69,7 +68,6 @@ compile_commands.json
 
 # QtCreator local machine specific files for imported projects
 *creator.user*
-=======
 # C++ objects and libs
 *.slo
 *.lo
@@ -126,4 +124,3 @@ compile_commands.json
 
 # QtCreator local machine specific files for imported projects
 *creator.user*
->>>>>>> 6c668fc02aa975b7426e35345cc6a3bceed780ea
