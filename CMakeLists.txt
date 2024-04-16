@@ -30,7 +30,7 @@ target_compile_definitions(${target} PUBLIC
 )
 
 target_include_directories(${target} INTERFACE 
-    ${CMAKE_CURRENT_SOURCE_DIR})
+    ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_link_libraries(${target} PUBLIC
     Qt::Core
